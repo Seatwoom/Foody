@@ -77,6 +77,7 @@ const controlAddRecipe = async function (newRecipe) {
     addRecipeView.renderError(error.message);
   }
 };
+
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
