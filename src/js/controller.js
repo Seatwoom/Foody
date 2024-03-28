@@ -8,6 +8,7 @@ import paginationView from './views/paginationView';
 import addRecipeView from './views/addRecipeView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import sortView from './views/sortView.js';
 
 // const recipeContainer = document.querySelector('.recipe');
 
@@ -34,10 +35,21 @@ const controlSearchResults = async function () {
   try {
     resultsView.renderSpinner();
     const query = searchVIew.getQuery();
-    if (!query) return;
+    if (!query || query.trim().length === 0) {
+      sortView.toggleSortButtons(false);
+      resultsView.renderError('No results found. Please try again.');
+      resultsView.clearResults();
+      return;
+    }
     await model.loadSearchResults(query);
+    if (model.state.search.results.length === 0) {
+      resultsView.renderError('No results found. Please try again.');
+      sortView.toggleSortButtons(false);
+      return;
+    }
     resultsView.render(model.getSearchResultsPage(1));
     paginationView.render(model.state.search);
+    sortView.toggleSortButtons(true);
   } catch (error) {}
 };
 const controlPagination = function (goToPage) {
@@ -77,7 +89,15 @@ const controlAddRecipe = async function (newRecipe) {
     addRecipeView.renderError(error.message);
   }
 };
-
+const controlSortResults = function (sortBy) {
+  if (!sortBy) return;
+  if (sortBy === 'ingredients') {
+    model.sortByIngredients();
+  } else if (sortBy === 'cooking-time') {
+    model.sortByCookingTime();
+  }
+  resultsView.render(model.getSearchResultsPage());
+};
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
@@ -86,5 +106,6 @@ const init = function () {
   searchVIew.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
+  sortView.addHandlerSort(controlSortResults);
 };
 init();

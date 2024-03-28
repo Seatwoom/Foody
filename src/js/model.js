@@ -42,7 +42,6 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
     const data = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
-    console.log(data);
     state.search.results = data.data.recipes.map(recipe => {
       return {
         id: recipe.id,
@@ -127,4 +126,14 @@ export const uploadRecipe = async function (newRecipe) {
   } catch (error) {
     throw error;
   }
+};
+
+export const sortByIngredients = function () {
+  state.search.results.sort(
+    (a, b) => a.ingredients.length - b.ingredients.length
+  );
+};
+
+export const sortByCookingTime = function () {
+  state.search.results.sort((a, b) => a.cookingTime - b.cookingTime);
 };
