@@ -8,7 +8,6 @@ import paginationView from './views/paginationView';
 import addRecipeView from './views/addRecipeView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import sortView from './views/sortView.js';
 
 // const recipeContainer = document.querySelector('.recipe');
 
@@ -89,15 +88,6 @@ const controlAddRecipe = async function (newRecipe) {
     addRecipeView.renderError(error.message);
   }
 };
-const controlSortResults = function (sortBy) {
-  if (!sortBy) return;
-  if (sortBy === 'ingredients') {
-    model.sortByIngredients();
-  } else if (sortBy === 'cooking-time') {
-    model.sortByCookingTime();
-  }
-  resultsView.render(model.getSearchResultsPage());
-};
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
@@ -106,6 +96,5 @@ const init = function () {
   searchVIew.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerUpload(controlAddRecipe);
-  sortView.addHandlerSort(controlSortResults);
 };
 init();

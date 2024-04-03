@@ -1,7 +1,6 @@
 import { API_URL, RES_FOR_PAGE, KEY } from './config';
 // import { getJSON, sendJSON } from './views/helpers.js';
 import { AJAX } from './views/helpers.js';
-
 export const state = {
   recipe: {},
   search: {
@@ -26,6 +25,7 @@ const createRecipeObject = function (data) {
     ...(recipe.key && { key: recipe.key }),
   };
 };
+
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}${id}?key=${KEY}`);
@@ -126,14 +126,4 @@ export const uploadRecipe = async function (newRecipe) {
   } catch (error) {
     throw error;
   }
-};
-
-export const sortByIngredients = function () {
-  state.search.results.sort(
-    (a, b) => a.ingredients.length - b.ingredients.length
-  );
-};
-
-export const sortByCookingTime = function () {
-  state.search.results.sort((a, b) => a.cookingTime - b.cookingTime);
 };
